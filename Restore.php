@@ -24,6 +24,13 @@ class Restore Extends Base\RestoreBase{
 				$sth = $this->FreePBX->Database->prepare($sql);
 				$sth->execute(array($entry['groupid'],$entry['user'],$entry['uuid'],$entry['displayname'],$entry['fname'],$entry['lname'],$entry['title'],$entry['company'],$entry['address']));
 			}
+			$sql = "truncate contactmanager_entry_numbers";
+			$sth = $this->FreePBX->Database->prepare($sql);
+			$sth->execute();
+			$groups = $this->FreePBX->Userman->getAllGroups();
+			foreach($groups as $group) {
+				$this->FreePBX->Contactmanager->usermanUpdateGroup($group['id'],'',$group);
+			}
 		}
 		$this->FreePBX->Contactmanager->bulkhandlerImport('contacts', $configs['data'], true);
 		$this->importFeatureCodes($configs['features']);
