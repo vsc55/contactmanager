@@ -10,9 +10,11 @@ class Contactmanager extends Base {
 		 * @returns - contactmanager groups
 		 * @uri /contactmanager/groups
 		 */
-		$app->get('/groups', function ($request, $response, $args) {
-			$groups = $this->freepbx->Contactmanager->getGroups();
-			return $response->withJson($groups);
+		$freepbx = $this->freepbx;
+		$app->get('/groups', function ($request, $response, $args) use($freepbx) {
+			$groups = $freepbx->Contactmanager->getGroups();
+			$response->getBody()->write(json_encode($groups));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllReadScopeMiddleware());
 
 		/**
@@ -20,9 +22,10 @@ class Contactmanager extends Base {
 		 * @returns - contactmanager groups
 		 * @uri /contactmanager/groups/:id
 		 */
-		$app->get('/groups/{id}', function ($request, $response, $args) {
-			$groups = $this->freepbx->Contactmanager->getGroupsbyOwner($args['id']);
-			return $response->withJson($groups);
+		$app->get('/groups/{id}', function ($request, $response, $args) use($freepbx) {
+			$groups = $freepbx->Contactmanager->getGroupsbyOwner($args['id']);
+			$response->getBody()->write(json_encode($groups));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllReadScopeMiddleware());
 
 		/**
@@ -30,12 +33,14 @@ class Contactmanager extends Base {
 		 * @returns - contactmanager group info
 		 * @uri /contactmanager/groups/:id/:groupid
 		 */
-		$app->get('/groups/{id}/{groupid}', function ($request, $response, $args) {
-			$group = $this->freepbx->Contactmanager->getGroupByID($args['groupid']);
+		$app->get('/groups/{id}/{groupid}', function ($request, $response, $args) use($freepbx) {
+			$group = $freepbx->Contactmanager->getGroupByID($args['groupid']);
 			if($group['owner'] !== -1 && $group['owner'] !== $args['id']) {
-				return $response->withJson(false);
+				$response->getBody()->write(json_encode(false));
+				return $response->withHeader('Content-Type', 'application/json');
 			}
-			return $response->withJson($group);
+			$response->getBody()->write(json_encode($group));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllReadScopeMiddleware());
 
 		/**
@@ -43,13 +48,15 @@ class Contactmanager extends Base {
 		 * @returns - contactmanager entry info
 		 * @uri /contactmanager/groups/:id/:groupid/:entryid
 		 */
-		$app->get('/groups/{id}/{groupid}/entries', function ($request, $response, $args) {
-			$group = $this->freepbx->Contactmanager->getGroupByID($args['groupid']);
+		$app->get('/groups/{id}/{groupid}/entries', function ($request, $response, $args) use($freepbx) {
+			$group = $freepbx->Contactmanager->getGroupByID($args['groupid']);
 			if($group['owner'] !== -1 && $group['owner'] !== $args['id']) {
-				return $response->withJson(false);
+				$response->getBody()->write(json_encode(false));
+				return $response->withHeader('Content-Type', 'application/json');
 			}
-			$list = $this->freepbx->Contactmanager->getEntriesByGroupID($args['groupid']);
-			return $response->withJson($list);
+			$list = $freepbx->Contactmanager->getEntriesByGroupID($args['groupid']);
+			$response->getBody()->write(json_encode($list));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllReadScopeMiddleware());
 
 		/**
@@ -57,9 +64,10 @@ class Contactmanager extends Base {
 		 * @returns - contactmanager entries
 		 * @uri /contactmanager/entries/:id
 		 */
-		$app->get('/entries/{id}', function ($request, $response, $args) {
-			$entry = $this->freepbx->Contactmanager->getEntryByID($args['id']);
-			return $response->withJson($entry);
+		$app->get('/entries/{id}', function ($request, $response, $args) use($freepbx) {
+			$entry = $freepbx->Contactmanager->getEntryByID($args['id']);
+			$response->getBody()->write(json_encode($entry));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllReadScopeMiddleware());
 	}
 }
