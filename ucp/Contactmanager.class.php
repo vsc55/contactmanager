@@ -21,6 +21,17 @@ class Contactmanager extends Modules{
 	}
 
 	public function getWidgetList() {
+		$responseData = array(
+			"rawname" => "contactmanager",
+			"display" => _("Contacts"),
+			"icon" => "fa fa-address-card",
+			"list" => []
+		);
+		$errors = $this->validate();
+		if ($errors['hasError']) {
+			return array_merge($responseData, $errors);
+		}
+
 		$widgets = array();
 
 		$widgets['contactmanager'] = array(
@@ -30,19 +41,28 @@ class Contactmanager extends Modules{
 			'description' => _("PBX Contacts")
 		);
 
-		if (empty($widgets)) {
-			return array();
-		}
+		$responseData['list'] = $widgets;
+		return $responseData;
+	}
 
-		return array(
-			"rawname" => "contactmanager",
-			"display" => _("Contacts"),
-			"icon" => "fa fa-address-card",
-			"list" => $widgets
+	/**
+	 * validate against rules
+	 */
+	private function validate($extension = false) {
+		$data = array(
+			'hasError' => false,
+			'errorMessages' => []
 		);
+
+		return $data;
 	}
 
 	public function getWidgetDisplay($id) {
+		$errors = $this->validate($id);
+		if ($errors['hasError']) {
+			return $errors;
+		}
+
 		$displayvars = array();
 		$displayvars['groups'] = $this->cm->getGroupsByOwner($this->userId);
 		$displayvars['total'] = 0;
