@@ -3085,11 +3085,11 @@ class Contactmanager extends FreePBX_Helpers implements BMO {
 			if(in_array($key,$skip)) {
 				continue;
 			}
-			$value = !empty($regexp) ? preg_replace($regexp,'',$value) : $value;
-			$value = trim($value);
 			if(empty($value)) {
 				continue;
 			}
+			$value = !empty($regexp) ? preg_replace($regexp,'',$value) : $value;
+			$value = trim($value);
 			if(preg_match('/^' . $search . '$/i',$value) || (strlen($search) > $lookuplen && preg_match('/' . $search . '/i',$value))) {
 				$k = $iterator->getSubIterator(0)->key();
 				return $contacts[$k];
