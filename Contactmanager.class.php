@@ -886,9 +886,9 @@ class Contactmanager extends FreePBX_Helpers implements BMO {
 							continue;
 						}
 						$numbers[$index]['number'] = $number;
-						$numbers[$index]['extension'] = $_POST['extension'][$index];
-						$numbers[$index]['type'] = $_POST['numbertype'][$index];
-						$numbers[$index]['locale'] = $_POST['numberlocale'][$index];
+						$numbers[$index]['extension'] = $_POST['extension'][$index] ?? '';
+						$numbers[$index]['type'] = $_POST['numbertype'][$index] ?? '';
+						$numbers[$index]['locale'] = $_POST['numberlocale'][$index] ?? '';
 						if (!empty($_POST['sms'][$index])) {
 							$numbers[$index]['flags'][] = 'sms';
 						}
